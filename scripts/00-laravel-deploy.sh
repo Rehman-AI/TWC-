@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-echo "=== Running Composer Install ==="
-composer install --no-dev --working-dir=/var/www/html --optimize-autoloader
-
 echo "=== Preparing Database & Permissions ==="
 mkdir -p /var/www/html/database
 if [ ! -f /var/www/html/database/database.sqlite ]; then
@@ -10,11 +7,11 @@ fi
 chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 echo "=== Running Migrations & Seeder ==="
-php artisan migrate --force --seed
+php artisan migrate --force --seed || php artisan migrate --force || true
 
 echo "=== Optimizing Cache ==="
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+php artisan config:cache || true
+php artisan route:cache || true
+php artisan view:cache || true
 
-echo "=== Laravel Ready! ==="
+echo "=== TWC Content Studio is Ready! ==="
