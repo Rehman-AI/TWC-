@@ -6,7 +6,7 @@ WORKDIR /var/www/html
 # Copy all project files directly into /var/www/html
 COPY . /var/www/html
 
-# Set permissions for scripts
+# Set script permissions
 RUN chmod -R 755 /var/www/html/scripts
 
 # Image configuration
@@ -22,11 +22,17 @@ ENV APP_ENV production
 ENV APP_DEBUG false
 ENV LOG_CHANNEL stderr
 
-# Install all composer dependencies during build so vendor/autoload.php is always present
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Copy .env.example so composer and artisan have basic env
+RUN cp .env.example .env
 
-# Set write permissions for storage, cache, and database
+# Install vendor dependencies safely during build (no scripts to avoid missing APP_KEY error)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+# Pre-create database & set full write permissions
 RUN mkdir -p /var/www/html/database \
+    /var/www/html/storage/framework/sessions \
+    /var/www/html/storage/framework/views \
+    /var/www/html/storage/framework/cache \
     && touch /var/www/html/database/database.sqlite \
     && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
