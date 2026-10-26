@@ -1,39 +1,31 @@
-FROM richarvey/nginx-php-fpm:3.1.6
+FROM serversideup/php:8.4-fpm-nginx
 
-# Set working directory to webroot
+USER root
+
 WORKDIR /var/www/html
 
-# Copy all project files directly into /var/www/html
-COPY . /var/www/html
+# Copy project files
+COPY --chown=www-data:www-data . /var/www/html
 
-# Set script permissions
-RUN chmod -R 755 /var/www/html/scripts
-
-# Image configuration
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
-
-# Laravel configuration
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
-
-# Ensure a basic .env exists
+# Touch empty .env
 RUN touch /var/www/html/.env
 
-# Install vendor dependencies safely during build
+# Install Composer dependencies using native PHP 8.4
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# Pre-create database & set full write permissions
+# Ensure writable directories
 RUN mkdir -p /var/www/html/database \
     /var/www/html/storage/framework/sessions \
     /var/www/html/storage/framework/views \
     /var/www/html/storage/framework/cache \
     && touch /var/www/html/database/database.sqlite \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
     && chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
-CMD ["/start.sh"]
+# Add startup script to entrypoint.d
+RUN mkdir -p /etc/entrypoint.d
+COPY --chmod=755 scripts/00-laravel-deploy.sh /etc/entrypoint.d/99-deploy.sh
+
+USER www-data
+
+EXPOSE 8080
