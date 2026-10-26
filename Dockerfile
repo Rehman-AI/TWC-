@@ -22,10 +22,10 @@ ENV APP_ENV production
 ENV APP_DEBUG false
 ENV LOG_CHANNEL stderr
 
-# Copy .env.example so composer and artisan have basic env
-RUN cp .env.example .env
+# Ensure a basic .env exists
+RUN touch /var/www/html/.env
 
-# Install vendor dependencies safely during build (no scripts to avoid missing APP_KEY error)
+# Install vendor dependencies safely during build
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Pre-create database & set full write permissions

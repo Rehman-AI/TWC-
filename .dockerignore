@@ -1,6 +1,7 @@
 /vendor
 /node_modules
 .env
-.env.*
+.env.production
+.env.backup
 .git
 database/*.sqlite*
