@@ -1,0 +1,309 @@
+/*
+ * TWC Content Studio — Custom Filament Theme
+ * Matches the prototype UI: dark mode, accent pink, glow effects,
+ * glassmorphism, Inter font, micro-animations
+ *
+ * Design tokens from: c:\Users\power\Desktop\TWC\index.html
+ */
+
+/* ── Force Dark Mode ──────────────────────────────────────────── */
+:root {
+    color-scheme: dark;
+}
+
+/* ── Custom Properties (from prototype) ───────────────────────── */
+:root {
+    --twc-bg: #09090b;
+    --twc-bg-sidebar: #0c0c0f;
+    --twc-bg-surface: #111114;
+    --twc-bg-card: #16161a;
+    --twc-bg-card-h: #1c1c21;
+    --twc-accent: #e8227a;
+    --twc-purple: #8b5cf6;
+    --twc-green: #10b981;
+    --twc-border: rgba(255,255,255,0.06);
+    --twc-border-h: rgba(255,255,255,0.10);
+    --twc-glow-1: #ff96a9;
+    --twc-glow-2: #e8b4f0;
+    --twc-glow-3: #ffb3c6;
+    --twc-glow-4: #d44d8a;
+    --twc-spring: cubic-bezier(0.34,1.56,0.64,1);
+    --twc-ease: cubic-bezier(0.22,1,0.36,1);
+}
+
+@property --glow-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+/* ── Body & Root ──────────────────────────────────────────────── */
+body {
+    background: var(--twc-bg) !important;
+    font-family: 'Inter', -apple-system, system-ui, sans-serif !important;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────── */
+.fi-sidebar {
+    background: var(--twc-bg-sidebar) !important;
+    border-right: 1px solid var(--twc-border) !important;
+}
+
+.fi-sidebar-nav-groups {
+    gap: 0.25rem !important;
+}
+
+/* Sidebar item hover glow */
+.fi-sidebar-item a:hover,
+.fi-sidebar-item a[data-active] {
+    background: rgba(232, 34, 122, 0.08) !important;
+    border-radius: 8px;
+    transition: all 0.3s var(--twc-ease);
+}
+
+.fi-sidebar-item a[data-active] {
+    border-left: 2px solid var(--twc-accent) !important;
+}
+
+/* ── Top Bar ──────────────────────────────────────────────────── */
+.fi-topbar {
+    background: rgba(9, 9, 11, 0.85) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--twc-border) !important;
+}
+
+/* ── Cards / Sections — Glassmorphism ─────────────────────────── */
+.fi-section,
+.fi-ta-ctn,
+.fi-wi {
+    background: var(--twc-bg-card) !important;
+    border: 1px solid var(--twc-border) !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.3s, transform 0.3s var(--twc-ease), box-shadow 0.3s;
+}
+
+.fi-section:hover,
+.fi-ta-ctn:hover {
+    border-color: var(--twc-border-h) !important;
+}
+
+/* ── Table Rows ───────────────────────────────────────────────── */
+.fi-ta-row:hover td {
+    background: rgba(232, 34, 122, 0.04) !important;
+    transition: background 0.2s;
+}
+
+.fi-ta-row {
+    border-bottom: 1px solid var(--twc-border) !important;
+}
+
+/* ── Buttons — Primary with glow ──────────────────────────────── */
+.fi-btn-primary,
+button[type="submit"].fi-btn {
+    background: linear-gradient(135deg, #8c0f60, #e8227a) !important;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s var(--twc-spring), box-shadow 0.3s;
+}
+
+.fi-btn-primary:hover,
+button[type="submit"].fi-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(232, 34, 122, 0.35) !important;
+}
+
+.fi-btn-primary:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ── Form Inputs ──────────────────────────────────────────────── */
+.fi-input-wrp,
+.fi-select-wrp {
+    background: var(--twc-bg-surface) !important;
+    border: 1px solid var(--twc-border) !important;
+    border-radius: 8px !important;
+    transition: border-color 0.2s;
+}
+
+.fi-input-wrp:focus-within,
+.fi-select-wrp:focus-within {
+    border-color: rgba(232, 34, 122, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(232, 34, 122, 0.1) !important;
+}
+
+/* ── Badges / Tags ────────────────────────────────────────────── */
+.fi-badge {
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    transition: transform 0.2s var(--twc-spring);
+}
+
+.fi-badge:hover {
+    transform: scale(1.05);
+}
+
+/* ── Login/Register Page ──────────────────────────────────────── */
+.fi-simple-layout {
+    background: var(--twc-bg) !important;
+}
+
+.fi-simple-main-ctn {
+    background: var(--twc-bg-card) !important;
+    border: 1px solid var(--twc-border) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Rotating glow border on login card */
+.fi-simple-main-ctn::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 17px;
+    background: conic-gradient(
+        from var(--glow-angle, 0deg),
+        var(--twc-glow-1),
+        var(--twc-glow-2),
+        var(--twc-glow-3),
+        var(--twc-glow-4),
+        var(--twc-glow-1)
+    );
+    animation: glowSpin 6s linear infinite;
+    z-index: -1;
+    opacity: 0.15;
+}
+
+@keyframes glowSpin {
+    to { --glow-angle: 360deg; }
+}
+
+/* ── Stats Overview Widget ────────────────────────────────────── */
+.fi-wi-stats-overview-stat {
+    background: var(--twc-bg-card) !important;
+    border: 1px solid var(--twc-border) !important;
+    border-radius: 12px !important;
+    transition: transform 0.3s var(--twc-spring), border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-2px);
+    border-color: var(--twc-border-h) !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Subtle blob gradient inside stat cards */
+.fi-wi-stats-overview-stat::after {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,34,122,0.08), transparent 70%);
+    top: -40px;
+    right: -40px;
+    pointer-events: none;
+    animation: blobFloat 8s ease-in-out infinite;
+}
+
+@keyframes blobFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-10px, 10px) scale(1.1); }
+}
+
+/* ── Navigation Groups ────────────────────────────────────────── */
+.fi-sidebar-group-label {
+    text-transform: uppercase !important;
+    font-size: 10px !important;
+    letter-spacing: 1.5px !important;
+    color: rgba(255,255,255,0.3) !important;
+    font-weight: 600 !important;
+}
+
+/* ── Notifications ────────────────────────────────────────────── */
+.fi-no-notification {
+    background: var(--twc-bg-card) !important;
+    border: 1px solid var(--twc-border) !important;
+    border-radius: 12px !important;
+}
+
+/* ── Modal / Dialog ───────────────────────────────────────────── */
+.fi-modal-window {
+    background: var(--twc-bg-card) !important;
+    border: 1px solid var(--twc-border) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5) !important;
+}
+
+/* ── Page Heading ─────────────────────────────────────────────── */
+.fi-header-heading {
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* ── Micro-animations ─────────────────────────────────────────── */
+.fi-sidebar-item {
+    animation: fadeSlideIn 0.3s var(--twc-ease) both;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fi-sidebar-item:nth-child(1) { animation-delay: 0.02s; }
+.fi-sidebar-item:nth-child(2) { animation-delay: 0.04s; }
+.fi-sidebar-item:nth-child(3) { animation-delay: 0.06s; }
+.fi-sidebar-item:nth-child(4) { animation-delay: 0.08s; }
+.fi-sidebar-item:nth-child(5) { animation-delay: 0.10s; }
+.fi-sidebar-item:nth-child(6) { animation-delay: 0.12s; }
+
+/* ── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.07);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.14);
+}
+
+/* ── Brand Logo Glow ──────────────────────────────────────────── */
+.fi-logo {
+    position: relative;
+}
+
+/* ── Breadcrumbs ──────────────────────────────────────────────── */
+.fi-breadcrumbs li {
+    transition: color 0.2s;
+}
+.fi-breadcrumbs li:hover {
+    color: var(--twc-accent) !important;
+}
+
+/* ── Empty State ──────────────────────────────────────────────── */
+.fi-ta-empty-state {
+    padding: 3rem !important;
+}
+
+.fi-ta-empty-state-icon {
+    color: rgba(232, 34, 122, 0.3) !important;
+}

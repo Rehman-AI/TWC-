@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Filament\Resources\TaskResource\Pages;
+
+use App\Filament\Resources\TaskResource;
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
+
+class ListTasks extends ListRecords
+{
+    protected static string $resource = TaskResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        if (auth()->user()?->role?->isOwnerOrManager()) {
+            return [Actions\CreateAction::make()->label('Assign Task')];
+        }
+        return [];
+    }
+}
